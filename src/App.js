@@ -6,6 +6,11 @@ const App = () => {
     const [running, setRunning] = useState(false);
     const [pausedTime, setPausedTime] = useState(0);
     const [intervalId, setIntervalId] = useState(null);
+    const [laps, setLaps] = useState([]);
+
+    const seconds = `0${timer % 60}`.slice(-2);
+      const minutes = `0${Math.floor((timer / 60) % 60)}`.slice(-2);
+      const hours = `0${Math.floor(timer / 3600)}`.slice(-2);
   
     const handleStart = () => {
       if (!running) {
@@ -33,7 +38,11 @@ const App = () => {
     };
   
     const lap = () => {
-      // Implement lap functionality here
+      const lapTime = `${formatTime()}`;
+      console.log(hours);
+      
+
+      setLaps((prevLaps) => [...prevLaps, lapTime]);
     };
   
     const handleResume = () => {
@@ -46,11 +55,11 @@ const App = () => {
         setPausedTime(0);
       }
     };
-  
+
     const formatTime = () => {
-      const seconds = `0${timer % 60}`.slice(-2);
-      const minutes = `0${Math.floor((timer / 60) % 60)}`.slice(-2);
-      const hours = `0${Math.floor(timer / 3600)}`.slice(-2);
+      // const seconds = `0${timer % 60}`.slice(-2);
+      // const minutes = `0${Math.floor((timer / 60) % 60)}`.slice(-2);
+      // const hours = `0${Math.floor(timer / 3600)}`.slice(-2);
   
       return `${hours} : ${minutes} : ${seconds}`;
     };
@@ -58,18 +67,28 @@ const App = () => {
   return (
     <div className="container">
       <div className="timer-Display">
-         {/* {time} */}
          {formatTime()}
       </div>
-      {/* <ul className="laps"></ul> */}
       <div className="buttons">
         <button className="startTimer" onClick={handleStart}>Start</button>
         <button className="pauseTimer" onClick={handlePause}>Pause</button>
         <button className="resetTimer" onClick={handleReset}>Reset</button>
         <button className="restartTimer" onClick={handleResume}>Resume</button>
-        {/* <button className="lap" onclick={lap}>Lap</button> */}
-        {/* <button className="resetLap" onclick={resetLap}>Reset Lap</button> */}
-
+        <button className="lap" onClick={lap}>Lap</button>
+        <br></br>
+        <ul>
+        {laps.length > 0 ? (
+          <ul>
+            {laps.map((lap, index) => (
+              <li key={index}>
+                {`LAP ${index + 1}`}-{lap}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No laps recorded.</p>
+        )}
+        </ul>
       </div>
     </div>
   );
